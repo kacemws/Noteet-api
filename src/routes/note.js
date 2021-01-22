@@ -92,11 +92,9 @@ router.put("/", auth, async (req, res) => {
     }
 
     const { id, value, color } = req.body;
+    const owner = req.user?.id;
 
-    const note = await noteModule.update(id, {
-      value,
-      color,
-    });
+    const note = await noteModule.find(id, owner);
 
     if (!note) {
       throw {
@@ -105,7 +103,10 @@ router.put("/", auth, async (req, res) => {
       };
     }
 
-    console.log(note);
+    await noteModule.update(id, {
+      value,
+      color,
+    });
 
     res.status(200).json({
       message: "updated successfuly",
@@ -142,7 +143,9 @@ router.delete("/", auth, async (req, res) => {
       };
     }
 
-    const note = await noteModule.delete(id);
+    const owner = req.user?.id;
+
+    const note = await noteModule.find(id, owner);
 
     if (!note) {
       throw {
@@ -151,7 +154,7 @@ router.delete("/", auth, async (req, res) => {
       };
     }
 
-    console.log(note);
+    await noteModule.delete(id);
 
     res.status(200).json({
       message: "deleted successfuly",

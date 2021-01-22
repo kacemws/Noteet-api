@@ -23,6 +23,13 @@ async function deleteNote(id) {
   return await Note.findByIdAndDelete(id);
 }
 
+async function findNote(id, owner) {
+  return await Note.findOne({
+    owner,
+    _id: id,
+  });
+}
+
 async function getNotes(owner) {
   return await Note.find({ owner });
 }
@@ -31,3 +38,4 @@ exports.create = createNote;
 exports.update = updateNote;
 exports.delete = deleteNote;
 exports.get = getNotes;
+exports.find = findNote;

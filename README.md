@@ -29,4 +29,4 @@
 :white_check_mark: create model for notes <br/>
 :white_check_mark: add logic for notes <br/>
 :white_check_mark: add route for note so that we can add / update / delete / get notes for a given user <br/>
-:white_square_button verify that the user who made the post/put/delete request is the owner of the note <br/>
+:white_check_mark: verify that the user who made the put/delete request is the owner of the note <br/>
