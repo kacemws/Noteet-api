@@ -180,7 +180,7 @@ function verifyNote(data) {
 }
 function verifyExistingNote(data) {
   const schema = Joi.object({
-    id: Joi.string().required(),
+    id: Joi.string().length(12).required(),
     value: Joi.string().required(),
     color: Joi.string().required(),
   });
@@ -190,7 +190,7 @@ function verifyExistingNote(data) {
 
 function verifyId(data) {
   const schema = Joi.object({
-    id: Joi.string().required(),
+    id: Joi.string().length(12).required(),
   });
 
   return schema.validate(data);
