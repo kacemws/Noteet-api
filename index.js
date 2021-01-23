@@ -34,6 +34,19 @@ app.get("/", (req, res) => {
   );
 });
 
+app.use(function (err, req, res, next) {
+  console.dir(err);
+
+  if (err) {
+    // Your Error Status code and message here.
+    res.status(err.statusCode ?? 500).json({
+      message: err.message ?? "error ! ",
+    });
+  }
+
+  // Send Some valid Response
+});
+
 app.listen(port, () => {
   console.log(`listening on port : ${port}`);
 });
