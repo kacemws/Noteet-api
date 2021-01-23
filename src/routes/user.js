@@ -151,6 +151,79 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/token", async (req, res) => {
+  try {
+    // checking that the user didn't send an empty request
+    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+      throw {
+        statusCode: 400,
+        body: "Empty request!",
+      };
+    }
+
+    // checking that the user sent a refresh token
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      throw {
+        statusCode: 400,
+        body: "refresh token not provided!",
+      };
+    }
+
+    // checking that the provided refresh token is not expired
+    const instance = await tokenModule.find({
+      refreshToken,
+    });
+
+    if (!instance) {
+      throw {
+        statusCode: 401,
+        body: "refresh token expired!",
+      };
+    }
+
+    console.log(instance);
+
+    // deleting the token/refresh token from the db
+    await tokenModule.delete({ refreshToken });
+    console.log("deleted");
+
+    // getting the owner of that token
+    let owner;
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      console.log(err);
+      owner = user;
+    });
+    console.log(owner);
+
+    // creating new credentials
+    const payload = {
+      id: owner.id,
+    };
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "15m",
+    });
+    const newRefreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+    await tokenModule.create({
+      accessToken,
+      refreshToken: newRefreshToken,
+    });
+
+    // sending the new credentials
+    res.status(200).json({
+      accessToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (err) {
+    if (err.statusCode) {
+      res.status(err.statusCode).json({
+        message: err.body,
+      });
+    }
+  }
+});
+
 function verifyUsersData(data) {
   const schema = Joi.object({
     email: Joi.string().email().required(),
