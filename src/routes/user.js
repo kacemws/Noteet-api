@@ -4,6 +4,7 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 
+const tokenModule = require("../logic/token");
 const userModule = require("../logic/User");
 const auth = require("../middleware/auth");
 
@@ -69,6 +70,10 @@ router.post("/signup", async (req, res) => {
       expiresIn: "15m",
     });
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+    await tokenModule.create({
+      accessToken,
+      refreshToken,
+    });
     res.status(200).json({
       accessToken,
       refreshToken,
@@ -128,6 +133,10 @@ router.post("/login", async (req, res) => {
       expiresIn: "15m",
     });
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+    await tokenModule.create({
+      accessToken,
+      refreshToken,
+    });
     res.status(200).json({
       accessToken,
       refreshToken,
