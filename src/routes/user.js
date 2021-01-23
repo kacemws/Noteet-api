@@ -34,12 +34,15 @@ router.get("/", auth, async (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
+    // checking that the body's request is not empty
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
       throw {
         statusCode: 400,
         body: "Empty request!",
       };
     }
+
+    // checking that the body's request match the defined needed body
     const { error } = verifyUsersData(req.body);
 
     if (error) {
@@ -49,6 +52,7 @@ router.post("/signup", async (req, res) => {
       };
     }
 
+    // checking to see if a user with the same email exists
     const data = req.body;
 
     let user = await userModule.find(data.email);
@@ -60,20 +64,25 @@ router.post("/signup", async (req, res) => {
       };
     }
 
+    // creating the user
     user = await userModule.create(data);
 
+    // generating credentials
     const payload = {
       id: user.id,
     };
-    // Send 200 - generated token
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "15m",
     });
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+
+    // saving credentials
     await tokenModule.create({
       accessToken,
       refreshToken,
     });
+
+    // returning credentials
     res.status(200).json({
       accessToken,
       refreshToken,
@@ -90,12 +99,15 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
+    // checking that the body's request is not empty
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
       throw {
         statusCode: 400,
         body: "Empty request!",
       };
     }
+
+    // checking that the body's request match the defined needed body
     const { error } = verifyUsersLogin(req.body);
 
     if (error) {
@@ -105,6 +117,7 @@ router.post("/login", async (req, res) => {
       };
     }
 
+    // checking that the user exists, and if the same password was provided
     const { email, password } = req.body;
 
     let user = await userModule.find(email);
@@ -126,6 +139,7 @@ router.post("/login", async (req, res) => {
       };
     }
 
+    // generating credentials
     const payload = {
       id: user.id,
     };
@@ -133,10 +147,14 @@ router.post("/login", async (req, res) => {
       expiresIn: "15m",
     });
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+
+    // saving credentials
     await tokenModule.create({
       accessToken,
       refreshToken,
     });
+
+    // sending generated credentials
     res.status(200).json({
       accessToken,
       refreshToken,
