@@ -63,7 +63,7 @@ router.post("/signup", async (req, res) => {
         body: "already exisits",
       };
     }
-
+    data.username = data.email;
     // creating the user
     user = await userModule.create(data);
 
@@ -247,7 +247,6 @@ function verifyUsersData(data) {
     email: Joi.string().email().required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    username: Joi.string().required(),
     password: Joi.string().required(),
   });
 
