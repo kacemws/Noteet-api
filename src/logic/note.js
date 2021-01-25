@@ -31,7 +31,7 @@ async function findNote(id, owner) {
 }
 
 async function getNotes(owner) {
-  return await Note.find({ owner });
+  return await Note.find({ owner }).sort({ createdAt: -1 }).exec();
 }
 
 exports.create = createNote;
