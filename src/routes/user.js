@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 const tokenModule = require("../logic/token");
-const userModule = require("../logic/User");
+const userModule = require("../logic/user");
 const auth = require("../middleware/auth");
 
 router.get("/", auth, async (req, res) => {
