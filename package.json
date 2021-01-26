@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "start:dev": "nodemon index.js"
   },
   "keywords": [
     "api",
@@ -24,5 +25,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.13",
     "nodemon": "^2.0.7"
+  },
+  "engines": {
+    "node": "14.15.1"
   }
 }
