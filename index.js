@@ -12,7 +12,7 @@ const cors = require("cors");
 const InitiateMongoServer = require("./src/utils/db");
 
 // INIT
-// InitiateMongoServer();
+InitiateMongoServer();
 const app = express();
 
 // PORT
