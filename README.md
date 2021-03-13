@@ -25,7 +25,7 @@
 :white_check_mark: create model for user <br/>
 :white_check_mark: add logic for user <br/>
 :white_check_mark: add route for user so that we can login / signup / get personal informations <br/>
-:white_square_button: refresh the token <br/>
+:white_check_mark: refresh the token <br/>
 :white_check_mark: create model for notes <br/>
 :white_check_mark: add logic for notes <br/>
 :white_check_mark: add route for note so that we can add / update / delete / get notes for a given user <br/>
