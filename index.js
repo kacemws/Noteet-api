@@ -25,10 +25,10 @@ const note = require("./src/routes/note");
 //MIDDLEWARES
 app.use(bodyParser.json());
 app.use(cors());
-app.use("/user", user);
-app.use("/notes", note);
+app.use("/v1/user", user);
+app.use("/v1/notes", note);
 
-app.get("/", (req, res) => {
+app.get("/v1/", (req, res) => {
   res.send(
     "welcome to the express boilerplate provided by your friendly neighberhood belkacember"
   );
