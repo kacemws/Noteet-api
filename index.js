@@ -10,6 +10,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const InitiateMongoServer = require("./src/utils/db");
+var path = require("path");
 
 // INIT
 InitiateMongoServer();
@@ -29,9 +30,10 @@ app.use("/v1/user", user);
 app.use("/v1/notes", note);
 
 app.get("/v1/", (req, res) => {
-  res.send(
-    "welcome to the express boilerplate provided by your friendly neighberhood belkacember"
-  );
+  // res.send(
+  //   "welcome to the express boilerplate provided by your friendly neighberhood belkacember"
+  // );
+  res.sendFile(path.join(__dirname + "/src/static/index.html"));
 });
 
 app.use(function (err, req, res, next) {
