@@ -7,6 +7,104 @@ const auth = require("../middleware/auth");
 //utils
 const noteModule = require("../logic/note");
 
+////////////////////schemas
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Note:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The note's ID.
+ *           example: 0
+ *         note:
+ *           type: string
+ *           description: The content of the note.
+ *           example: my first note using noteet
+ *         color:
+ *           type: string
+ *           description: The code for the color used.
+ *           example: "#e6ee96"
+ *         createdAt:
+ *           type: Date
+ *           description: The day where the user created this note.
+ *           example: 2020-10-10
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     NewNote:
+ *       type: object
+ *       properties:
+ *         value:
+ *           type: string
+ *           description: The content of the note.
+ *           example: my first note using noteet
+ *         color:
+ *           type: string
+ *           description: The code for the color used.
+ *           example: "#e6ee96"
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UpdateNote:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The id of the note.
+ *           example: 11de5dzefzefzef
+ *         value:
+ *           type: string
+ *           description: The content of the note.
+ *           example: my updated note
+ *         color:
+ *           type: string
+ *           description: The code for the color used.
+ *           example: "#e6ee96"
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     DeletedNote:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The id of the note.
+ *           example: 11de5dzefzefzef
+ */
+
+////////////////////operations
+
+/**
+ * @swagger
+ * paths :
+ *   /v1/notes:
+ *     get:
+ *       summary: Retrieve user's notes.
+ *       description: Retrieve the notes of the user who sent the request via the provided token.
+ *       responses:
+ *         200:
+ *           description: An Array of notes.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Note'
+ */
+
 router.get("/", auth, async (req, res) => {
   try {
     const owner = req.user?.id;
@@ -32,6 +130,30 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /v1/notes:
+ *   post:
+ *     summary: Create a note.
+ *     description: Creates a note for the user who sent the request.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NewNote'
+ *       responses:
+ *         201:
+ *           description: The id of the new note.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: the id of the newly created note
+ */
 router.post("/", auth, async (req, res) => {
   try {
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
@@ -58,7 +180,7 @@ router.post("/", auth, async (req, res) => {
       color,
     });
 
-    res.status(200).json({
+    res.status(201).json({
       message: "created successfuly",
       id: note["_id"],
     });
@@ -72,6 +194,30 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /v1/notes:
+ *   put:
+ *     summary: Update a note.
+ *     description: update an existing note.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateNote'
+ *       responses:
+ *         200:
+ *           description: The id of the updated note.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: the id of the updated note
+ */
 router.put("/", auth, async (req, res) => {
   try {
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
@@ -120,6 +266,30 @@ router.put("/", auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /v1/notes:
+ *   delete:
+ *     summary: Delete a note.
+ *     description: delete an existing note.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DeletedNote'
+ *       responses:
+ *         200:
+ *           description: The id of the deleted note.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: the id of the deleted note
+ */
 router.delete("/", auth, async (req, res) => {
   try {
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {

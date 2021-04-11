@@ -8,6 +8,39 @@ const tokenModule = require("../logic/token");
 const userModule = require("../logic/user");
 const auth = require("../middleware/auth");
 
+/**
+ * @swagger
+ * paths :
+ *   /v1/user:
+ *     get:
+ *       summary: Retrieve user's information.
+ *       description: Retrieve the infos of the user who sent the request via the provided token.
+ *       responses:
+ *         200:
+ *           description: An object containing the user's information.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   email:
+ *                     type: string
+ *                     description: The user's email.
+ *                     example: me@belkacember.com
+ *                   firstName:
+ *                     type: string
+ *                     description: The user's first name.
+ *                     example: Belkacem
+ *                   lastName:
+ *                     type: string
+ *                     description: the user's last name.
+ *                     example : Berras
+ *                   username:
+ *                     type: string
+ *                     description: the user's username.
+ *                     example: kacemws
+ */
+
 router.get("/", auth, async (req, res) => {
   try {
     const owner = req.user.id;
