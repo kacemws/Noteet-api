@@ -201,8 +201,6 @@ router.post("/token", async (req, res) => {
       };
     }
 
-    console.log(instance);
-
     // deleting the token/refresh token from the db
     await tokenModule.delete({ refreshToken });
     console.log("deleted");
@@ -213,7 +211,6 @@ router.post("/token", async (req, res) => {
       console.log(err);
       owner = user;
     });
-    console.log(owner);
 
     // creating new credentials
     const payload = {

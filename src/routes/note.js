@@ -58,8 +58,6 @@ router.post("/", auth, async (req, res) => {
       color,
     });
 
-    console.log(note);
-
     res.status(200).json({
       message: "created successfuly",
       id: note["_id"],
