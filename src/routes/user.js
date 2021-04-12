@@ -8,10 +8,54 @@ const tokenModule = require("../logic/token");
 const userModule = require("../logic/user");
 const auth = require("../middleware/auth");
 
+//components
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Signup:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: The user's email.
+ *           example: me@belkacember.com
+ *         firstName:
+ *           type: string
+ *           description: The user's first name.
+ *           example: Belkacem
+ *         lastName:
+ *           type: string
+ *           description: the user's last name.
+ *           example : Berras
+ *         password:
+ *           type: string
+ *           description: the user's password.
+ *           example: password
+ *     Login:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: The user's email.
+ *           example: me@belkacember.com
+ *         password:
+ *           type: string
+ *           description: the user's password.
+ *           example: password
+ *     Refresh:
+ *       type: object
+ *       properties:
+ *         refreshToken:
+ *           type: string
+ *           description: the user's old refresh token.
+ *           example: jndlazfhdlmùljefamzehff46fze57f6ez46fzef43ze7f5eaf3zef
+ */
+
 /**
  * @swagger
  * paths :
- *   /v1/user:
+ *   /v1/user/:
  *     get:
  *       summary: Retrieve user's information.
  *       description: Retrieve the infos of the user who sent the request via the provided token.
@@ -39,6 +83,78 @@ const auth = require("../middleware/auth");
  *                     type: string
  *                     description: the user's username.
  *                     example: kacemws
+ *   /v1/user/signup/:
+ *     post:
+ *       summary: Signup a user in the system.
+ *       description: Register a new user in our database
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Signup'
+ *         responses:
+ *           201:
+ *             description: The user crdentials.
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       description: the access token of the newly created user
+ *                     refreshToken:
+ *                       type: string
+ *                       description: the refresh token of the newly created user
+ *   /v1/user/login/:
+ *     post:
+ *       summary: authentificate a user in the system.
+ *       description: login an already existing user to our system
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Login'
+ *         responses:
+ *           200:
+ *             description: The user crdentials.
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       description: the access token of the user
+ *                     refreshToken:
+ *                       type: string
+ *                       description: the refresh token of the user
+ *   /v1/user/token/:
+ *     post:
+ *       summary: Refresh the user's token.
+ *       description: re-authentificate a user in the system using his refresh token
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Refresh'
+ *         responses:
+ *           200:
+ *             description: The user crdentials.
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       description: the new access token of the user
+ *                     refreshToken:
+ *                       type: string
+ *                       description: the new refresh token of the user
  */
 
 router.get("/", auth, async (req, res) => {
