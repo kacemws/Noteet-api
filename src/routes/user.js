@@ -6,6 +6,7 @@ const router = express.Router();
 
 const tokenModule = require("../logic/token");
 const userModule = require("../logic/user");
+const noteModule = require("../logic/note");
 const auth = require("../middleware/auth");
 
 //components
@@ -166,11 +167,15 @@ router.get("/", auth, async (req, res) => {
       lastName,
       username,
     } = await userModule.findUserById(owner);
+    console.log("1");
+    let notes = await noteModule.get(owner);
+    console.log("2");
     res.status(200).json({
       email,
       firstName,
       lastName,
       username,
+      notes,
     });
   } catch (err) {
     if (err.statusCode) {

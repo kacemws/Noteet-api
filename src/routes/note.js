@@ -190,6 +190,33 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+router.get("/:id", auth, async (req, res) => {
+  try {
+    const owner = req.user?.id;
+    const { id } = req?.params;
+
+    const note = await noteModule.find(id, owner);
+
+    if (!note) {
+      throw {
+        statusCode: 400,
+        body: "note not found",
+      };
+    }
+
+    res.status(200).json({
+      ...note["_doc"],
+    });
+  } catch (err) {
+    console.error(err);
+    if (err.statusCode) {
+      res.status(err.statusCode).json({
+        message: err.body,
+      });
+    }
+  }
+});
+
 router.post("/", auth, async (req, res) => {
   try {
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
@@ -230,7 +257,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-router.put("/", auth, async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
       throw {
@@ -239,7 +266,9 @@ router.put("/", auth, async (req, res) => {
       };
     }
 
-    const { error } = verifyExistingNote(req.body);
+    const { id } = req?.params;
+    const { error } = verifyExistingNote({ ...req.body, id });
+
     if (error) {
       throw {
         statusCode: 400,
@@ -247,7 +276,7 @@ router.put("/", auth, async (req, res) => {
       };
     }
 
-    const { id, value, color } = req.body;
+    const { value, color } = req.body;
     const owner = req.user?.id;
 
     const note = await noteModule.find(id, owner);
@@ -278,16 +307,9 @@ router.put("/", auth, async (req, res) => {
   }
 });
 
-router.delete("/", auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
-    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-      throw {
-        statusCode: 400,
-        body: "Empty request!",
-      };
-    }
-
-    const { id } = req.body;
+    const { id } = req?.params;
 
     const { error } = verifyId({
       id,
